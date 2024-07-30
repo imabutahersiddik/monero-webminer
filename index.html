@@ -10,7 +10,8 @@
   <body>
     <h1>Monero Miner</h1>
     <div>
-      <p>Current Hashrate: <span id="hashrate">0 H/s</span></p> <p>Total Hashes: <span id="totalHashes">0</span></p>
+      <p>Current Hashrate: <span id="hashrate">0 H/s</span></p>
+      <p>Total Hashes: <span id="totalHashes">0</span></p>
     </div>
 
     <!-- Start Of Mining Code -->
@@ -24,8 +25,8 @@
       var threads = -1;
       var password = "";
 
-      startMining(pool, walletAddress, workerId, threads, password);
-      throttleMiner = 20;
+      // Remove or comment out the throttleMiner line:
+      // throttleMiner = 20; 
 
       // Function to update stats
       function updateStats() {
@@ -48,7 +49,7 @@
         alert("Monero mining started!"); 
       }
 
-      // Add the event listener to your mining library's start function
+      // Start mining with the callback
       startMining(pool, walletAddress, workerId, threads, password, onMinerStart);
 
     </script>
@@ -59,7 +60,7 @@
     </p>
     <script>
       // Assuming the pool URL structure is consistent, you can dynamically create the link
-      document.getElementById("poolLink").href = `https://moneroocean.stream/`; 
+      document.getElementById("poolLink").href = `https://pool-website.com/workers/${walletAddress}`; 
       // Replace 'https://pool-website.com/workers/' with the actual URL structure of your chosen pool
     </script>
 
