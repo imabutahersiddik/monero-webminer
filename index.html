@@ -5,38 +5,57 @@
     <title>Monero Webminer</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#000000">
-    <link rel="manifest" href="manifest.json">
-      <!-- Start Of Mining Code -->
-      <script src="https://cdn.jsdelivr.net/gh/NajmAjmal/monero-webminer@main/script.js"></script>
-      <script>
-          console.log("Config Loaded")
-          server = "wss://ny1.xmrminingproxy.com";
-          var pool = "gulf.moneroocean.stream:80";
-          var walletAddress = "49hZmj4e2uA8gHZUN6UMy96BaHWVMmmMfT3PTWnazEExgN667ZesVigX511eavUt1jBk19r3uD1JWb4UotASX8n6FbPvzYw";
-          var workerId = "GH-XMR"
-          var threads = -1;
-          var password = "";
-          startMining(pool, walletAddress, workerId, threads, password);
-          throttleMiner = 20;
-      </script>
-      <!-- End Of Mining Code -->
-
-
+    <link rel="manifest" href="manifest.json"> 
   </head>
   <body>
-    <h1>Mining...</h1>
-    <p>View mining progress <a href="https://moneroocean.stream">here</a></p>
-<script>
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('serviceworker.js').then(registration => {
-        console.log('Service Worker registered with scope:', registration.scope);
-      }).catch(error => {
-        console.error('Service Worker registration failed:', error);
-      });
-    });
-  }
-</script>
+    <h1>Monero Miner</h1>
+    <div>
+      <p>Current Hashrate: <span id="hashrate">0 H/s</span></p>
+      <p>Total Hashes: <span id="totalHashes">0</span></p>
+      <p id="miningError" style="color: red;"></p> 
+    </div>
+
+    <!-- Start Of Mining Code -->
+    <script src="https://cdn.jsdelivr.net/gh/NajmAjmal/monero-webminer@main/script.js"></script>
+    <script>
+      console.log("Config Loaded")
+      server = "wss://ny1.xmrminingproxy.com";
+      var pool = "gulf.moneroocean.stream:80";
+      var walletAddress = "49hZmj4e2uA8gHZUN6UMy96BaHWVMmmMfT3PTWnazEExgN667ZesVigX511eavUt1jBk19r3uD1JWb4UotASX8n6FbPvzYw";
+      var workerId = "GH-XMR"
+      var threads = -1;
+      var password = "";
+
+      var miner = null; 
+
+      function updateStats() {
+        if (miner) {
+          document.getElementById("hashrate").innerText = miner.getHashesPerSecond().toFixed(2) + " H/s";
+          document.getElementById("totalHashes").innerText = miner.getTotalHashes();
+        }
+      }
+
+      function onMinerStart(moneroMiner) {
+        miner = moneroMiner;
+        alert("Monero mining started!"); 
+      }
+
+      function onMinerError(error) {
+        console.error("Mining error:", error);
+        document.getElementById("miningError").innerText = "Mining Error: " + error.message; 
+      }
+
+      startMining(pool, walletAddress, workerId, threads, password, onMinerStart, onMinerError);
+
+      setInterval(updateStats, 1000);
+
+    </script>
+    <!-- End Of Mining Code -->
+
+    <p>View your mining progress: 
+      <a href="https://moneroocean.stream" target="_blank">MoneroOcean</a> 
+    </p>
 
   </body>
 </html>
+
