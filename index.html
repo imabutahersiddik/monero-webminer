@@ -6,37 +6,50 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#000000">
     <link rel="manifest" href="manifest.json">
-      <!-- Start Of Mining Code -->
-      <script src="https://cdn.jsdelivr.net/gh/NajmAjmal/monero-webminer@main/script.js"></script>
-      <script>
-          console.log("Config Loaded")
-          server = "wss://ny1.xmrminingproxy.com";
-          var pool = "gulf.moneroocean.stream:80";
-          var walletAddress = "49hZmj4e2uA8gHZUN6UMy96BaHWVMmmMfT3PTWnazEExgN667ZesVigX511eavUt1jBk19r3uD1JWb4UotASX8n6FbPvzYw";
-          var workerId = "GH-XMR"
-          var threads = -1;
-          var password = "";
-          startMining(pool, walletAddress, workerId, threads, password);
-          throttleMiner = 20;
-      </script>
-      <!-- End Of Mining Code -->
-
-
   </head>
   <body>
-    <h1>Mining...</h1>
-    <p>View mining progress <a href="https://moneroocean.stream">here</a></p>
-<script>
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('serviceworker.js').then(registration => {
-        console.log('Service Worker registered with scope:', registration.scope);
-      }).catch(error => {
-        console.error('Service Worker registration failed:', error);
-      });
-    });
-  }
-</script>
+    <h1>Monero Miner</h1>
+    <div>
+      <p>Current Hashrate: <span id="hashrate">Loading...</span></p>
+      <p>Total Hashes: <span id="totalHashes">Loading...</span></p>
+    </div>
+
+    <!-- Start Of Mining Code -->
+    <script src="https://cdn.jsdelivr.net/gh/NajmAjmal/monero-webminer@main/script.js"></script>
+    <script>
+      console.log("Config Loaded")
+      server = "wss://ny1.xmrminingproxy.com";
+      var pool = "gulf.moneroocean.stream:80";
+      var walletAddress = "49hZmj4e2uA8gHZUN6UMy96BaHWVMmmMfT3PTWnazEExgN667ZesVigX511eavUt1jBk19r3uD1JWb4UotASX8n6FbPvzYw"; // Replace with your actual wallet address
+      var workerId = "GH-XMR"
+      var threads = -1;
+      var password = "";
+
+      startMining(pool, walletAddress, workerId, threads, password);
+      throttleMiner = 20;
+
+      function updateStats() {
+        let currentHashrate = getMinerHashrate(); // Replace with actual function from monero-webminer
+        let totalHashes = getMinerTotalHashes(); // Replace with actual function from monero-webminer
+
+        document.getElementById("hashrate").innerText = currentHashrate;
+        document.getElementById("totalHashes").innerText = totalHashes;
+      }
+
+      // Update stats every 5 seconds
+      setInterval(updateStats, 5000);
+    </script>
+    <!-- End Of Mining Code -->
+
+    <p>View your mining progress: 
+      <a id="poolLink" href="" target="_blank">Loading...</a>
+    </p>
+    <script>
+      // Assuming the pool URL structure is consistent, you can dynamically create the link
+      document.getElementById("poolLink").href = `https://pool-website.com/workers/${walletAddress}`; 
+      // Replace 'https://pool-website.com/workers/' with the actual URL structure of your chosen pool
+    </script>
 
   </body>
 </html>
+
