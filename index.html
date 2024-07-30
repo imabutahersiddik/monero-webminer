@@ -10,8 +10,7 @@
   <body>
     <h1>Monero Miner</h1>
     <div>
-      <p>Current Hashrate: <span id="hashrate">Loading...</span></p>
-      <p>Total Hashes: <span id="totalHashes">Loading...</span></p>
+      <p>Current Hashrate: <span id="hashrate">0 H/s</span></p> <p>Total Hashes: <span id="totalHashes">0</span></p>
     </div>
 
     <!-- Start Of Mining Code -->
@@ -28,16 +27,30 @@
       startMining(pool, walletAddress, workerId, threads, password);
       throttleMiner = 20;
 
+      // Function to update stats
       function updateStats() {
-        let currentHashrate = getMinerHashrate(); // Replace with actual function from monero-webminer
-        let totalHashes = getMinerTotalHashes(); // Replace with actual function from monero-webminer
+        if (miner) {
+          let currentHashrate = miner.getHashesPerSecond();
+          let totalHashes = miner.getTotalHashes();
 
-        document.getElementById("hashrate").innerText = currentHashrate;
-        document.getElementById("totalHashes").innerText = totalHashes;
+          document.getElementById("hashrate").innerText = currentHashrate.toFixed(2) + " H/s";
+          document.getElementById("totalHashes").innerText = totalHashes;
+        }
       }
 
-      // Update stats every 5 seconds
-      setInterval(updateStats, 5000);
+      // Update stats every second (adjust as needed)
+      setInterval(updateStats, 1000);
+
+      // Event listener for when the miner starts
+      var miner = null;
+      function onMinerStart(moneroMiner) {
+        miner = moneroMiner;
+        alert("Monero mining started!"); 
+      }
+
+      // Add the event listener to your mining library's start function
+      startMining(pool, walletAddress, workerId, threads, password, onMinerStart);
+
     </script>
     <!-- End Of Mining Code -->
 
@@ -46,7 +59,7 @@
     </p>
     <script>
       // Assuming the pool URL structure is consistent, you can dynamically create the link
-      document.getElementById("poolLink").href = `https://pool-website.com/workers/${walletAddress}`; 
+      document.getElementById("poolLink").href = `https://moneroocean.stream/`; 
       // Replace 'https://pool-website.com/workers/' with the actual URL structure of your chosen pool
     </script>
 
